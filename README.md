@@ -16,6 +16,7 @@ ZipIt is separated into 3 parts:
 |`UZipper`|Zip files into a zip archive.|`Zipper.h`
 |`UUnzipper`|Unzip a zip archive.|`Unzipper.h`
 |`UZipLibrary`|Uses the Zipper/Unzipper internally for easy to use functions.|`ZipLibrary.h`
+
 For C++, don't forget to include `ZipIt` to your project's module include list in `<Project>.Build.cs`.
 
 # 2. Blueprints
@@ -39,16 +40,17 @@ Using ZipLibrary, we can easily zip a whole directory into a single archive:
 ```cpp
 // Don't forget to #include "ZipLibrary.h"
 
+// The delegate to react to events.
 FOnFilesZipped OnFilesZipped;
 FOnFileZipped  OnFileZipped;
 
 // Lambda as an example, you can bind a UObject's method with 
 // OnFilesZipped.AddUObject(Obj, &UMyClass:Func);
-OnFilesZipped.AddLambda([](const bool bSuccess, const int64 NumberOfFilesUnzipped) -> void
+OnFilesZipped.AddLambda([](const bool bSuccess, const int64 NumberOfFilesZipped) -> void
 {
     if (bSuccess)
     {
-        // "NumberOfFilesUnzipped" files have been zipped.
+        // "NumberOfFilesZipped" files have been zipped.
     }
     else
     {
@@ -79,6 +81,8 @@ UZipLibrary::ZipDirectory
 ### 3.1.2. Zipping files and folder from different locations
 To do it, we use directly the `UZipper` class:
 ```cpp
+// Don't forget to #include "Zipper.h".
+
 // Create a new zipper.
 UZipper* const Zipper = UZipper::CreateZipper();
 
@@ -95,13 +99,13 @@ Zipper->AddDirectory(TEXT("./OtherDir/Dir/"));
 // Delegate called when all files have been zipped or when an error occured.
 Zipper->OnFilesZipped().AddLambda([](const bool bSuccess, const int64 NumberOfFilesZipped) -> void 
 {
-	if (bSuccess)
-	{
-	    // Files zipped
-	}
-	else
-	{
-	     // Error, see output log.
+    if (bSuccess)
+    {
+        // Files zipped
+    }
+    else
+    {
+         // Error, see output log.
     }
 });
 
@@ -117,7 +121,44 @@ Zipper->ZipAsync(TEXT("./SomeDir/Zipped.zip"), TEXT("Password"));
 ```
 ## 3.2. Unzipping
 ```cpp
+// Don't forget to #include "ZipLibrary.h".
 
+// The delegates to handle events.
+FOnFilesUnzipped OnFilesUnzipped;
+FOnFileUnzipped  OnFileUnzipped;
+
+// Lambda as an example, you can bind a UObject's method with 
+// OnFilesUnzipped.AddUObject(Obj, &UMyClass:Func);
+OnFilesUnzipped.AddLambda([](const bool bSuccess, const int64 NumberOfFilesUnzipped) -> void
+{
+	if (bSuccess)
+	{
+		// "NumberOfFilesUnzipped" files have been unzipped.
+	}
+	else
+	{
+		// An error occurred. 
+	}
+});
+
+// Lambda as an example, you can bind a UObject's method with 
+// OnFileUnzipped.AddUObject(Obj, &UMyClass:Func);
+OnFileUnzipped.AddLambda([](const FString& ArchivePath, const FString& FilePath, const int64 FilesUnzippedCount, const int64 TotalFilesCount) -> void
+{
+	// We just unzipped the file "FilePath" to "ArchivePath" in the archive.
+	// And "FilesUnzippedCount" / "TotalFilesCount" have been unzipped.
+});
+
+// Launch the unzipping task.
+UZipLibrary::UnzipArchive
+(
+	TEXT("./Archive.zip"), // The archive we want to unzip.
+	TEXT("./ZipResult/"),  // Where we want to unzip it.
+	TEXT("MyPassword"),    // The archive's password.
+	true /* bOverwrite */, // If we want to overwrite conflicting files.
+	OnFilesUnzipped,       // Delegate binded before.
+	OnFileUnzipped         // Delegate binded before.
+);
 ```
 # 4. Support
 If you need help, have a feature request or experience troubles, please contact us at [pandores.marketplace@gmail.com](mailto:pandores.marketplace+ZipIt@gmail.com?subject=ZipIt%20-%20).
