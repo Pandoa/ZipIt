@@ -48,7 +48,7 @@ OnFilesZipped.AddLambda([](const bool bSuccess, const int64 NumberOfFilesUnzippe
 {
     if (bSuccess)
     {
-        // "NumberOfFilesUnzipped" have been zipped.
+        // "NumberOfFilesUnzipped" files have been zipped.
     }
     else
     {
@@ -77,8 +77,47 @@ UZipLibrary::ZipDirectory
 );
 ```
 ### 3.1.2. Zipping files and folder from different locations
+To do it, we use directly the `UZipper` class:
+```cpp
+// Create a new zipper.
+UZipper* const Zipper = UZipper::CreateZipper();
+
+// We add the files we want here, it just registers the file
+// for when we will zip the archive. No check is done.
+Zipper->AddFile(TEXT("C:/Dir/apache_start.bat"), TEXT("start.bat"));
+Zipper->AddFile(TEXT("./SomeDir/uninstall.dat"), TEXT("Folder/uninstall.dat"));
+
+// We add the directories to include in the zip archive.
+// The directory is just registered, this method is cheap.
+Zipper->AddDirectory(TEXT("C:/Test/"));
+Zipper->AddDirectory(TEXT("./OtherDir/Dir/"));
+
+// Delegate called when all files have been zipped or when an error occured.
+Zipper->OnFilesZipped().AddLambda([](const bool bSuccess, const int64 NumberOfFilesZipped) -> void 
+{
+	if (bSuccess)
+	{
+	    // Files zipped
+	}
+	else
+	{
+	     // Error, see output log.
+    }
+});
+
+// Called just after a file has been zipped.
+Zipper->OnFileZipped().AddLambda([](const FString& ArchivePath, const FString& DiskPath, const int64 FilesZipped, const int64 TotalFilesToZip) -> void 
+{
+    // File "DiskPath" has been zipped.
+    // Remaining "FilesZipped" / "TotalFilesToZip" files to zip.
+});
+
+// Launch the zip task.
+Zipper->ZipAsync(TEXT("./SomeDir/Zipped.zip"), TEXT("Password"));
+```
+## 3.2. Unzipping
 ```cpp
 
 ```
-## 3.2. Unzipping
 # 4. Support
+If you need help, have a feature request or experience troubles, please contact us at [pandores.marketplace@gmail.com](mailto:pandores.marketplace+ZipIt@gmail.com?subject=ZipIt%20-%20).
