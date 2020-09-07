@@ -17,7 +17,10 @@ ZipIt is separated into 3 parts:
 |`UUnzipper`|Unzip a zip archive.|`Unzipper.h`
 |`UZipLibrary`|Uses the Zipper/Unzipper internally for easy to use functions.|`ZipLibrary.h`
 
-For C++, don't forget to include `ZipIt` to your project's module include list in `<Project>.Build.cs`.
+For C++, don't forget to include `ZipIt` to your project's module include list in `<Project>.Build.cs`:
+```cs
+PrivateDependencyModuleNames.AddRange(new string[] { "ZipIt" });
+```
 
 # 2. Blueprints
 ## 2.1. Zipping
