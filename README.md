@@ -134,33 +134,33 @@ FOnFileUnzipped  OnFileUnzipped;
 // OnFilesUnzipped.AddUObject(Obj, &UMyClass:Func);
 OnFilesUnzipped.AddLambda([](const bool bSuccess, const int64 NumberOfFilesUnzipped) -> void
 {
-	if (bSuccess)
-	{
-		// "NumberOfFilesUnzipped" files have been unzipped.
-	}
-	else
-	{
-		// An error occurred. 
-	}
+    if (bSuccess)
+    {
+        // "NumberOfFilesUnzipped" files have been unzipped.
+    }
+    else
+    {
+        // An error occurred. 
+    }
 });
 
 // Lambda as an example, you can bind a UObject's method with 
 // OnFileUnzipped.AddUObject(Obj, &UMyClass:Func);
 OnFileUnzipped.AddLambda([](const FString& ArchivePath, const FString& FilePath, const int64 FilesUnzippedCount, const int64 TotalFilesCount) -> void
 {
-	// We just unzipped the file "FilePath" to "ArchivePath" in the archive.
-	// And "FilesUnzippedCount" / "TotalFilesCount" have been unzipped.
+    // We just unzipped the file "FilePath" to "ArchivePath" in the archive.
+    // And "FilesUnzippedCount" / "TotalFilesCount" have been unzipped.
 });
 
 // Launch the unzipping task.
 UZipLibrary::UnzipArchive
 (
-	TEXT("./Archive.zip"), // The archive we want to unzip.
-	TEXT("./ZipResult/"),  // Where we want to unzip it.
-	TEXT("MyPassword"),    // The archive's password.
-	true /* bOverwrite */, // If we want to overwrite conflicting files.
-	OnFilesUnzipped,       // Delegate binded before.
-	OnFileUnzipped         // Delegate binded before.
+    TEXT("./Archive.zip"), // The archive we want to unzip.
+    TEXT("./ZipResult/"),  // Where we want to unzip it.
+    TEXT("MyPassword"),    // The archive's password.
+    true /* bOverwrite */, // If we want to overwrite conflicting files.
+    OnFilesUnzipped,       // Delegate binded before.
+    OnFileUnzipped         // Delegate binded before.
 );
 ```
 # 4. Support
