@@ -1,5 +1,6 @@
 # ZipIt - Documentation
-![ZipIt features](https://github.com/Pandoa/ZipIt/blob/master/Images/Features.PNG?raw=true)
+![ZipIt features](https://github.com/Pandoa/ZipIt/blob/master/Images/Features.PNG)
+
 # Table of content
 1. [Getting started](#1-getting-started)</br>
 2. [Blueprints](#2-blueprints)</br>
@@ -27,15 +28,15 @@ PrivateDependencyModuleNames.AddRange(new string[] { "ZipIt" });
 ### 2.1.1. Zipping a directory
 To zip a directory, we can use the helper node to do it in a single node:
 
-![Zip Directory Example](https://github.com/Pandoa/ZipIt/blob/master/Images/BpZipDirectory.png?raw=true)
+![Zip Directory Example](https://github.com/Pandoa/ZipIt/blob/master/Images/BpZipDirectory.png)
 ### 2.1.2. Zipping files from different locations
 A node to zip several files from different locations into a single zip archive exists:
 
-![Zip files example](https://github.com/Pandoa/ZipIt/blob/master/Images/BpZipFiles.png?raw=true)
+![Zip files example](https://github.com/Pandoa/ZipIt/blob/master/Images/BpZipFiles.png)
 ## 2.2. Unzipping
 To unzip a file, use the `Unzip Zip Archive` node:
 
-![Unzip zip example](https://github.com/Pandoa/ZipIt/blob/master/Images/BpUnzip.png?raw=true)
+![Unzip zip example](https://github.com/Pandoa/ZipIt/blob/master/Images/BpUnzip.png)
 # 3. C++
 ## 3.1. Zipping
 ### 3.1.1. Zipping a directory
