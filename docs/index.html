@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZipIt – Unreal Engine Compression Plugin | Zip & Unzip Archives with Password Support</title>
+    <meta name="description" content="Complete guide for ZipIt, the fast compression plugin for Unreal Engine. Zip entire directories, compress files from multiple locations, and unzip archives with optional password protection. Works in Blueprints and C++ with async delegates. Perfect for game devs needing reliable file packaging." />
+    <meta name="keywords" content="Unreal Engine compression, UE5 zip plugin, Unreal archive, zip files in Unreal, compression plugin, ZipIt, file compression, game development" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232563eb'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='20' font-weight='bold' fill='white' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" />
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg:#f6f8fa;--side:#fff;--border:#d0d7de;--text:#1f2328;--text2:#425066;--muted:#656d76;--accent:#2563eb;--radius:8px;--shadow:0 1px 3px rgba(0,0,0,.04);--shadow-md:0 4px 16px rgba(0,0,0,.06);--w:260px}
+        html{scroll-behavior:smooth}
+        body{font-family:"Inter",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+        ::-webkit-scrollbar{width:6px;height:6px}
+        ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+        .app{display:flex;min-height:100vh}
+        .sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--w);background:var(--side);border-right:1px solid var(--border);overflow-y:auto;padding:28px 20px 32px;z-index:100;transition:transform .25s ease}
+        .sidebar-brand{display:flex;align-items:center;gap:10px;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+        .sidebar-brand .logo{width:36px;height:36px;background:var(--accent);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;flex-shrink:0}
+        .sidebar-brand h1{font-size:20px;font-weight:700;letter-spacing:-.3px}
+        .sidebar-brand h1 span{color:var(--accent)}
+        .sidebar nav{display:flex;flex-direction:column;gap:2px}
+        .sidebar nav a{display:block;padding:7px 14px;border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--text2);text-decoration:none;transition:background .15s,color .15s}
+        .sidebar nav a:hover{background:#f0f2f5;color:var(--text)}
+        .sidebar nav a.active{background:var(--accent);color:#fff}
+        .sidebar nav .nav-group{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:16px 14px 6px;margin-top:4px}
+        .sidebar nav .nav-group:first-of-type{padding-top:0;margin-top:0}
+        .sidebar nav .sub-link{padding-left:34px;font-size:13px;font-weight:400}
+        .main{flex:1;margin-left:var(--w);padding:0 48px 80px;max-width:1080px}
+        .page-header{padding:48px 0 32px;border-bottom:1px solid var(--border);margin-bottom:40px}
+        .page-header h1{font-size:38px;font-weight:700;letter-spacing:-.8px;line-height:1.2;margin-bottom:6px}
+        .page-header h1 span{color:var(--accent)}
+        .page-header p{font-size:18px;color:var(--text2);max-width:600px}
+        .page-header .actions{display:flex;gap:16px;flex-wrap:wrap;margin-top:20px}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:var(--radius);font-weight:600;font-size:15px;text-decoration:none;transition:all .2s;border:1px solid transparent}
+        .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .btn-primary:hover{background:#1d4ed8;border-color:#1d4ed8;transform:translateY(-1px);box-shadow:var(--shadow-md)}
+        .btn-outline{background:transparent;color:var(--text2);border-color:var(--border)}
+        .btn-outline:hover{background:var(--bg);border-color:var(--text2)}
+        .feature-img{margin-top:24px;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+        .feature-img img{display:block;width:100%;height:auto;vertical-align:middle}
+        .content h2{font-size:28px;font-weight:700;letter-spacing:-.4px;margin-top:56px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+        .content h3{font-size:20px;font-weight:600;letter-spacing:-.2px;margin-top:36px;margin-bottom:12px}
+        .content h4{font-size:17px;font-weight:600;margin-top:28px;margin-bottom:8px}
+        .content p{margin-bottom:16px;color:var(--text2)}
+        .content a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+        .content a:hover{border-bottom-color:var(--accent)}
+        .content ul,.content ol{margin:0 0 20px 24px;color:var(--text2)}
+        .content li{margin-bottom:4px}
+        .content pre{border-radius:var(--radius);padding:18px 22px;overflow-x:auto;font-size:13.5px;line-height:1.7;margin:16px 0 24px;border:1px solid var(--border);background:#fff;box-shadow:var(--shadow)}
+        .content pre code{font-family:"JetBrains Mono","Fira Code",monospace;font-size:inherit;background:transparent!important;padding:0;border-radius:0}
+        .content code{font-family:"JetBrains Mono","Fira Code",monospace;font-size:13px;background:#f0f2f5;padding:2px 10px;border-radius:4px;color:var(--text);border:1px solid var(--border)}
+        .doc-table-wrapper{margin:20px 0 28px;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);background:#fff}
+        .doc-table-wrapper table{width:100%;border-collapse:collapse;font-size:14px}
+        .doc-table-wrapper table thead{background:#f0f4f9}
+        .doc-table-wrapper table th{text-align:left;padding:14px 20px;font-weight:600;font-size:13px;color:var(--text2);border-bottom:1px solid var(--border)}
+        .doc-table-wrapper table td{padding:14px 20px;border-bottom:1px solid #f0f2f5;color:var(--text2)}
+        .doc-table-wrapper table tbody tr:last-child td{border-bottom:none}
+        .doc-table-wrapper table tbody tr:hover{background:#f8fafc}
+        .doc-table-wrapper table td code{font-size:12.5px;background:#eef2f6;border:none}
+        .content .img-wrapper{margin:20px 0 28px;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+        .content .img-wrapper img{display:block;width:100%;height:auto;vertical-align:middle}
+        .support-box{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;margin-top:16px;box-shadow:var(--shadow)}
+        .support-box p{margin-bottom:4px}
+        .support-box a{font-weight:500}
+        .menu-toggle{display:none;position:fixed;top:16px;left:16px;z-index:200;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;font-size:20px;cursor:pointer;box-shadow:var(--shadow);color:var(--text);line-height:1}
+        .menu-toggle:hover{background:#f0f2f5}
+        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:90;backdrop-filter:blur(2px)}
+        @media(max-width:900px){:root{--w:280px}.menu-toggle{display:block}.sidebar{transform:translateX(-100%);width:var(--w);padding:24px 18px 32px}.sidebar.open{transform:translateX(0)}.overlay.open{display:block}.main{margin-left:0;padding:0 24px 60px}.page-header{padding-top:72px}.page-header h1{font-size:30px}.content h2{font-size:24px}}
+        @media(max-width:480px){.main{padding:0 16px 48px}.page-header h1{font-size:26px}.content pre{padding:14px 16px;font-size:12px}.support-box{padding:20px 18px}}
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
+    <div class="overlay" id="overlay"></div>
+    <div class="app">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo">Z</div>
+                <h1>Zip<span>It</span></h1>
+            </div>
+            <nav>
+                <a href="#getting-started" class="active">Getting Started</a>
+                <div class="nav-group">Blueprints</div>
+                <a href="#bp-zipping" class="sub-link">Zipping</a>
+                <a href="#bp-unzipping" class="sub-link">Unzipping</a>
+                <div class="nav-group">C++</div>
+                <a href="#cpp-zipping" class="sub-link">Zipping</a>
+                <a href="#cpp-unzipping" class="sub-link">Unzipping</a>
+                <div class="nav-group">Help</div>
+                <a href="#support">Support</a>
+            </nav>
+        </aside>
+        <main class="main">
+            <header class="page-header" id="top">
+                <h1>ZipIt <span>Documentation</span></h1>
+                <p>Lightweight compression &amp; extraction for Unreal Engine.</p>
+                <div class="actions">
+                    <a href="https://www.fab.com/listings/f4dc728d-a5b7-43c7-974a-246e6c41f0cb" target="_blank" class="btn btn-primary">⬇ Download on Fab</a>
+                    <a href="#getting-started" class="btn btn-outline">Read the docs</a>
+                </div>
+                <div class="feature-img">
+                    <img src="https://github.com/Pandoa/ZipIt/blob/master/Images/Features.PNG?raw=true" alt="ZipIt features" loading="lazy" />
+                </div>
+            </header>
+            <div class="content">
+                <h2 id="getting-started">1. Getting started</h2>
+                <p>ZipIt is separated into 3 parts:</p>
+                <div class="doc-table-wrapper">
+                    <table>
+                        <thead><tr><th>Class</th><th>Functionality</th><th>Header</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>UZipper</code></td><td>Zip files into a zip archive.</td><td><code>Zipper.h</code></td></tr>
+                            <tr><td><code>UUnzipper</code></td><td>Unzip a zip archive.</td><td><code>Unzipper.h</code></td></tr>
+                            <tr><td><code>UZipLibrary</code></td><td>Uses the Zipper/Unzipper internally for easy to use functions.</td><td><code>ZipLibrary.h</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>For C++, don't forget to include <code>ZipIt</code> to your project's module include list in <code>&lt;Project&gt;.Build.cs</code>:</p>
+                <pre><code class="language-cs">PrivateDependencyModuleNames.AddRange(new string[] { "ZipIt" });</code></pre>
+
+                <h2 id="blueprints">2. Blueprints</h2>
+                <h3 id="bp-zipping">2.1. Zipping</h3>
+                <h4>2.1.1. Zipping a directory</h4>
+                <p>To zip a directory, we can use the helper node to do it in a single node:</p>
+                <div class="img-wrapper"><img src="https://github.com/Pandoa/ZipIt/blob/master/Images/BpZipDirectory.png?raw=true" alt="Blueprint Zip Directory" loading="lazy" /></div>
+                <h4>2.1.2. Zipping files from different locations</h4>
+                <p>A node to zip several files from different locations into a single zip archive exists:</p>
+                <div class="img-wrapper"><img src="https://github.com/Pandoa/ZipIt/blob/master/Images/BpZipFiles.png?raw=true" alt="Blueprint Zip Files" loading="lazy" /></div>
+                <h3 id="bp-unzipping">2.2. Unzipping</h3>
+                <p>To unzip a file, use the <code>Unzip Zip Archive</code> node:</p>
+                <div class="img-wrapper"><img src="https://github.com/Pandoa/ZipIt/blob/master/Images/BpUnzip.png?raw=true" alt="Blueprint Unzip" loading="lazy" /></div>
+
+                <h2 id="c">3. C++</h2>
+                <h3 id="cpp-zipping">3.1. Zipping</h3>
+                <h4>3.1.1. Zipping a directory</h4>
+                <p>Using <code>ZipLibrary</code>, we can easily zip a whole directory into a single archive:</p>
+                <pre><code class="language-cpp">// Don't forget to #include "ZipLibrary.h"
+
+// The delegate to react to events.
+FOnFilesZipped OnFilesZipped;
+FOnFileZipped  OnFileZipped;
+
+// Lambda as an example, you can bind a UObject's method with
+// OnFilesZipped.AddUObject(Obj, &amp;UMyClass:Func);
+OnFilesZipped.AddLambda([](const bool bSuccess, const int64 NumberOfFilesZipped) -&gt; void
+{
+    if (bSuccess)
+    {
+        // "NumberOfFilesZipped" files have been zipped.
+    }
+    else
+    {
+        // An error occurred.
+    }
+});
+
+// Lambda as an example, you can bind a UObject's method with
+// OnFileZipped.AddUObject(Obj, &amp;UMyClass:Func);
+OnFileZipped.AddLambda([](const FString&amp; ArchivePath, const FString&amp; FilePath, const int64 FilesZippedCount, const int64 TotalFilesCount) -&gt; void
+{
+    // We just zipped the file "FilePath" to "ArchivePath" in the archive.
+    // And "FilesZippedCount" / "TotalFilesCount" have been zipped.
+});
+
+// Launch the zip task.
+UZipLibrary::ZipDirectory
+(
+    TEXT("./MyDir/"),            // Directory to zip.
+    TEXT("./Result/Zipped.zip"), // Resulting .zip archive.
+    TEXT("ZipPassword"),         // Archive password
+    EZipCompressLevel::Level9,   // Compression level, 9 is max.
+    EZipCreationFlag::Overwrite, // Overwrite existing files.
+    OnFilesZipped,               // Delegate binded before.
+    OnFileZipped                 // Delegate binded before.
+);</code></pre>
+
+                <h4>3.1.2. Zipping files and folder from different locations</h4>
+                <p>To do it, we use directly the <code>UZipper</code> class:</p>
+                <pre><code class="language-cpp">// Don't forget to #include "Zipper.h".
+
+// Create a new zipper.
+UZipper* const Zipper = UZipper::CreateZipper();
+
+// We add the files we want here, it just registers the file
+// for when we will zip the archive. No check is done.
+Zipper-&gt;AddFile(TEXT("C:/Dir/apache_start.bat"), TEXT("start.bat"));
+Zipper-&gt;AddFile(TEXT("./SomeDir/uninstall.dat"), TEXT("Folder/uninstall.dat"));
+
+// We add the directories to include in the zip archive.
+// The directory is just registered, this method is cheap.
+Zipper-&gt;AddDirectory(TEXT("C:/Test/"));
+Zipper-&gt;AddDirectory(TEXT("./OtherDir/Dir/"));
+
+// Delegate called when all files have been zipped or when an error occured.
+Zipper-&gt;OnFilesZipped().AddLambda([](const bool bSuccess, const int64 NumberOfFilesZipped) -&gt; void
+{
+    if (bSuccess)
+    {
+        // Files zipped
+    }
+    else
+    {
+        // Error, see output log.
+    }
+});
+
+// Called just after a file has been zipped.
+Zipper-&gt;OnFileZipped().AddLambda([](const FString&amp; ArchivePath, const FString&amp; DiskPath, const int64 FilesZipped, const int64 TotalFilesToZip) -&gt; void
+{
+    // File "DiskPath" has been zipped.
+    // Remaining "FilesZipped" / "TotalFilesToZip" files to zip.
+});
+
+// Launch the zip task.
+Zipper-&gt;ZipAsync(TEXT("./SomeDir/Zipped.zip"), TEXT("Password"));</code></pre>
+
+                <h3 id="cpp-unzipping">3.2. Unzipping</h3>
+                <pre><code class="language-cpp">// Don't forget to #include "ZipLibrary.h".
+
+// The delegates to handle events.
+FOnFilesUnzipped OnFilesUnzipped;
+FOnFileUnzipped  OnFileUnzipped;
+
+// Lambda as an example, you can bind a UObject's method with
+// OnFilesUnzipped.AddUObject(Obj, &amp;UMyClass:Func);
+OnFilesUnzipped.AddLambda([](const bool bSuccess, const int64 NumberOfFilesUnzipped) -&gt; void
+{
+    if (bSuccess)
+    {
+        // "NumberOfFilesUnzipped" files have been unzipped.
+    }
+    else
+    {
+        // An error occurred.
+    }
+});
+
+// Lambda as an example, you can bind a UObject's method with
+// OnFileUnzipped.AddUObject(Obj, &amp;UMyClass:Func);
+OnFileUnzipped.AddLambda([](const FString&amp; ArchivePath, const FString&amp; FilePath, const int64 FilesUnzippedCount, const int64 TotalFilesCount) -&gt; void
+{
+    // We just unzipped the file "FilePath" to "ArchivePath" in the archive.
+    // And "FilesUnzippedCount" / "TotalFilesCount" have been unzipped.
+});
+
+// Launch the unzipping task.
+UZipLibrary::UnzipArchive
+(
+    TEXT("./Archive.zip"), // The archive we want to unzip.
+    TEXT("./ZipResult/"),  // Where we want to unzip it.
+    TEXT("MyPassword"),    // The archive's password.
+    true /* bOverwrite */, // If we want to overwrite conflicting files.
+    OnFilesUnzipped,       // Delegate binded before.
+    OnFileUnzipped         // Delegate binded before.
+);</code></pre>
+
+                <h2 id="support">4. Support</h2>
+                <div class="support-box">
+                    <p>If you need help, have a feature request or experience troubles, please contact us at <a href="mailto:pandores.marketplace+ZipIt@gmail.com?subject=ZipIt%20-%20">pandores.marketplace@gmail.com</a></p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        (function() {
+            const s=document.getElementById('sidebar'),o=document.getElementById('overlay'),t=document.getElementById('menuToggle');
+            function open(){s.classList.add('open');o.classList.add('open');t.setAttribute('aria-expanded','true')}
+            function close(){s.classList.remove('open');o.classList.remove('open');t.setAttribute('aria-expanded','false')}
+            t.addEventListener('click',e=>{e.stopPropagation();s.classList.contains('open')?close():open()});
+            o.addEventListener('click',close);
+            document.addEventListener('keydown',e=>{if(e.key==='Escape'&&s.classList.contains('open'))close()});
+            s.querySelectorAll('nav a').forEach(l=>{l.addEventListener('click',()=>{if(window.innerWidth<=900)close()})});
+            const sections=document.querySelectorAll('.content h2[id], .content h3[id]'),links=s.querySelectorAll('nav a');
+            function update(){let current='';const y=window.scrollY+120;sections.forEach(sec=>{const t=sec.offsetTop,h=sec.offsetHeight;if(y>=t&&y<t+h)current=sec.id});links.forEach(l=>{l.classList.remove('active');if(l.getAttribute('href')==='#'+current)l.classList.add('active')})}
+            let ticking=false;window.addEventListener('scroll',()=>{if(!ticking){window.requestAnimationFrame(()=>{update();ticking=false});ticking=true}});update();
+        })();
+    </script>
+</body>
+</html>
